@@ -76,9 +76,9 @@ result = otter_allocator_create_t(allocator, int, single_int);
 *single_int = 42;
 
 /* We still allocate a single int here, but we manually specify the alignment. */
-result = otter_allocator_aligned_create_t(allocator, int, 16, single_int);
+result = otter_allocator_aligned_create_t(allocator, int, 16, another_int);
 
-/* Below is the same thing we did for integers, but with the two different floating point types. The macros that end with `_t` will automatically allocator the right size for you. */
+/* Below is the same thing we did for integers, but with the two different floating point types. The macros that end with `_t` will automatically allocate the right size for you. */
 
 result = otter_allocator_create_t(allocator, float, single_float);
 result = otter_allocator_create_t(allocator, double, single_double);
@@ -106,13 +106,13 @@ result = otter_allocator_alloc(allocator, 1, 1024, 16, &raw_byte_slice);
 
 /* Don't forget to clean up all the allocations! `destroy` is used for single items, and `free` is used for slices. */
 otter_allocator_destroy_t(allocator, int, single_int);
-otter_allocator_aligned_destroy_t(allocator, int, 16, single_int);
+otter_allocator_aligned_destroy_t(allocator, int, 16, another_int);
 otter_allocator_destroy(allocator, 1024, 16, raw_allocation);
 otter_allocator_destroy_t(allocator, float, single_float);
 otter_allocator_destroy_t(allocator, double, single_double);
 otter_allocator_free_t(allocator, int, int_slice);
-otter_allocator_aligned_free_t(allocator, int, 16, aligned_int_slice);
-otter_allocator_free(allocator, 1, 1024, raw_byte_slice);
+otter_allocator_free(allocator, aligned_int_slice, 8);
+otter_allocator_free(allocator, raw_byte_slice, 16);
 
 /* De-initialize the allocator implementation if needed here. */
 ```
@@ -127,7 +127,7 @@ otter_allocator_t allocator;
 
 /* Initialize the fba. */
 otter_fba_reset(&fba);
-fba.buffer = buffer;
+fba.buffer = slice;
 
 /* Now, we can get the allocator from the fba to actually perform allocations! */
 allocator = otter_fba_allocator(&fba);
