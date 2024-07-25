@@ -9,6 +9,7 @@ export default defineConfig({
       title: 'Otter Engine',
       social: {
         github: 'https://github.com/otterengine/otter',
+        discord: 'https://discord.gg/BjuJqSkPvF',
       },
       sidebar: [
         {
