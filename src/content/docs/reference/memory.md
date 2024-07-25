@@ -122,15 +122,15 @@ otter_allocator_free(allocator, raw_byte_slice, 16);
 ```c wrap
 otter_byte_t buffer[1024]; /* We use a fixed buffer of 1024 bytes, this is where all allocations will take place. */
 otter_slice_t slice = otter_slice_init(buffer, 1024); /* Create a slice from the buffer. */
-otter_fba_t fba;
+otter_fixed_buffer_allocator_t fba;
 otter_allocator_t allocator;
 
 /* Initialize the fba. */
-otter_fba_reset(&fba);
+otter_fixed_buffer_allocator_reset(&fba);
 fba.buffer = slice;
 
 /* Now, we can get the allocator from the fba to actually perform allocations! */
-allocator = otter_fba_allocator(&fba);
+allocator = otter_fixed_buffer_allocator(&fba);
 ```
 
 ### Page Allocator
